@@ -7,4 +7,4 @@ COPY        src .
 RUN         mvn package   
 RUN         mv target/shipping-1.0.jar shipping.jar
 RUN         rm -rf src/  
-ENTRYPOINT  [ "java", "-jar",  ]
+ENTRYPOINT  ["java", "-jar", "shipping.jar"]

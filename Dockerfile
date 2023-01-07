@@ -7,5 +7,7 @@ COPY        src/ src/
 RUN         ls -ltr 
 RUN         env && mvn package   
 RUN         mv target/shipping-1.0.jar shipping.jar
+USER        root 
 RUN         rm -rf src/  
-ENTRYPOINT  ["java", "-jar", "shipping.jar"]
+USER        roboshop 
+ENTRYPOINT  ["java", "-jar", "shipping.jar"]  

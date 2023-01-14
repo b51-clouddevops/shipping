@@ -1,0 +1,68 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping
+  labels:
+    app: shipping 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shipping 
+  template:
+    metadata:
+      labels:
+        app: shipping 
+    spec:
+      containers:
+      - name: shipping
+        image: 834725375088.dkr.ecr.us-east-1.amazonaws.com/shipping:3.0.1
+        ports:
+        - containerPort: 8080
+        envFrom:                                # envFrom : to inject a configMap
+          - configMapRef:
+              name: shipping-cm
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping-service
+spec:
+  selector:
+    app: shipping
+  ports:
+  - name: shipping-port
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+
+
+--- 
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: shipping-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: shipping-service
+            port:
+              number: 8080 
+
+--- 
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shipping-cm
+data: 
+  CART_ENDPOINT: "cart-service"
+  DB_HOST: "mysql-dev.robot.internal"

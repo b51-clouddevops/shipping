@@ -64,5 +64,5 @@ kind: ConfigMap
 metadata:
   name: shipping-cm
 data: 
-  CART_ENDPOINT: "cart-service"
+  CART_ENDPOINT: "cart-service:8080"
   DB_HOST: "mysql-dev.robot.internal"
